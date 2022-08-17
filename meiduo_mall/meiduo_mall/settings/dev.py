@@ -1,5 +1,5 @@
 # 开发环境配置文件
-
+import  sys
 """
 Django settings for meiduo_mall project.
 
@@ -30,6 +30,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+#追加导包路径
+#sys.path.insert(0,'E:\\mystud\\美多商城\\m_meiduo_project\\meiduo_mall\\meiduo_mall\\apps')
+sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
+# print(sys.path)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
