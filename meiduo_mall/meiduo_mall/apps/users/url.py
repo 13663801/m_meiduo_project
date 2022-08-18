@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from apps.users import views
+from . import views
 
 urlpatterns = [
     # 注册
