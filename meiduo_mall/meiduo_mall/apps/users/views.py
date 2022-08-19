@@ -1,4 +1,5 @@
 from django import http
+from django.contrib.auth import login
 from django.db import DatabaseError
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -52,9 +53,12 @@ class RegisterView(View):
         # 保存注册数据：核心
         #user = User.objects.all
         try:
-            User.objects.create_user(username=username, password=password, models=mobile)
+            user=User.objects.create_user(username=username, password=password, models=mobile)
         except DatabaseError:
             return render(request, 'register.html', {'register_errmsg': '注册失败'})
+
+        #实现状态保持
+        login(request,user)
 
         # 响应结果
         return redirect(reverse('contents:index'))
