@@ -6,8 +6,10 @@ from django.urls import reverse
 from django.views import View
 import re
 from users.models import User
-
+from utils.response_code import RETCODE
 # Create your views here.
+
+
 
 class RegisterView(View):
     """用户注册"""
@@ -66,4 +68,16 @@ class RegisterView(View):
 
        #return http.HttpResponse('注册成功，重定向到首页')
 
+class UsernameCountView(View):
+    """判断用户名是否重复注册"""
+
+    def get(self,request,username):
+        """
+        :param request: 请求对象
+        :param username: 用户名
+        :return: JSON
+        """
+
+        count=User.objects.filter(username=username).count()
+        return http.JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK', 'count': count})
 
