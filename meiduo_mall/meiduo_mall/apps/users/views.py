@@ -1,6 +1,7 @@
 from django import http
 from django.db import DatabaseError
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 import re
 from users.models import User
@@ -49,14 +50,16 @@ class RegisterView(View):
             return http.HttpResponseForbidden('请勾选用户协议')
 
         # 保存注册数据：核心
-        #user = User.objects.all()
+        #user = User.objects.all
         try:
             User.objects.create_user(username=username, password=password, models=mobile)
         except DatabaseError:
             return render(request, 'register.html', {'register_errmsg': '注册失败'})
 
         # 响应结果
+        return redirect(reverse('contents:index'))
 
-        return http.HttpResponse('注册成功，重定向到首页')
+
+       #return http.HttpResponse('注册成功，重定向到首页')
 
 

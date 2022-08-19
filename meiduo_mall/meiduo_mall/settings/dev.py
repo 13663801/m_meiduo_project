@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
+    'users',#用户注册
+    'contents',#广告首页
 ]
 #指定自定义的用户模型类
 AUTH_USER_MODEL = 'users.User'
