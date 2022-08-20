@@ -9,16 +9,27 @@ let vm = new Vue({
         password2:'',
         mobile:'',
         allow:'',
+        image_code_url:'',
+        image_code:'',
+
         //v-show
         error_name:false,
         error_password:false,
         error_password2:false,
         error_mobile:false,
         error_allow:false,
+        error_image_code:false,
+
         //v-error_message
         error_name_message:'',
         error_mobile_message:'',
+        error_image_code_message:'',
 
+    },
+
+    mounted(){
+        //生成图形验证码
+        this.generate_image_code();
     },
 
     methods:{//定义和实现事件方法
@@ -61,6 +72,7 @@ let vm = new Vue({
                 this.error_password = true;
             }
         },
+
         // 校验确认密码
         check_password2(){
             if(this.password != this.password2) {
@@ -69,6 +81,7 @@ let vm = new Vue({
                 this.error_password2 = false;
             }
         },
+
         // 校验手机号
         check_mobile(){
             let re = /^1[3-9]\d{9}$/;
@@ -80,6 +93,25 @@ let vm = new Vue({
             }
 
         },
+
+        // 生成图形验证码
+        generate_image_code(){
+            // 生成UUID。generateUUID() : 封装在common.js文件中，需要提前引入
+            this.uuid = generateUUID();
+            // 拼接图形验证码请求地址
+            this.image_code_url = "/image_codes/" + this.uuid + "/";
+        },
+
+        //校验图形验证码
+        check_image_code(){
+            if(this.image_code.length !=4 ){
+                this.error_image_code_message='请输入图形验证码';
+                this.error_image_code=true;
+            }else{
+                this.error_image_code=false;
+            }
+        },
+
         // 校验是否勾选协议
         check_allow(){
             if(!this.allow) {
@@ -88,6 +120,7 @@ let vm = new Vue({
                 this.error_allow = false;
             }
         },
+
         // 监听表单提交事件
         on_submit(){
             this.check_username();
