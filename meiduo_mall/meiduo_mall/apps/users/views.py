@@ -7,6 +7,7 @@ from django.views import View
 import re
 from users.models import User
 from utils.response_code import RETCODE
+from django_redis import get_redis_connection
 # Create your views here.
 
 
@@ -30,6 +31,7 @@ class RegisterView(View):
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         mobile = request.POST.get('mobile')
+        sms_code_client = request.POST.get('sms_code')
         allow = request.POST.get('allow')
 
         # 校验参数
@@ -51,6 +53,16 @@ class RegisterView(View):
         # 判断是否勾选用户协议
         if allow != 'on':
             return http.HttpResponseForbidden('请勾选用户协议')
+        #判断短信验证码是否正确
+        redis_conn=get_redis_connection('verify_code')
+        sms_code_server=redis_conn.get('sms_%s' % mobile)
+        if sms_code_server is None:
+            return render(request,'register.html',{'sms_code_errmsg':'短信验证码已失效'})
+
+        if sms_code_server.decode()!=sms_code_client:
+            return render(request, 'register.html', {'sms_code_errmsg': '输入短信验证码有误'})
+
+
 
         # 保存注册数据：核心
         #user = User.objects.all
